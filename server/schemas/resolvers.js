@@ -4,28 +4,28 @@ const { signToken } = require('../utils/auth');
 
 const resolvers = {
     Query: {
-        me: async (_, args) => {
-            return await User.findById(args.id);
-        }
+        me: async (parent, args, context) => {  
+            return await User.findOne({ _id: context.user._id }); 
+          },
     },
 
 
     Mutation: {
-        addUser: async (_, args) => {
-            const user = await User.create(args);
+        addUser: async (parent, { username, email, password }) => {
+            const user = await User.create({ username, email, password });
             const token = signToken(user);
             return { token, user };
         },
 
 
-        login: async (_, args) => {
-            const user = await User.findOne(args.email);
+        login: async (parent, { email, password }) => {
+            const user = await User.findOne({ email });
 
             if (!user) {
                 throw new AuthenticationError('No user found with this email address');
             }
 
-            const pass = await user.isCorrectPassword(args.password);
+            const pass = await user.isCorrectPassword(password);
 
             if (!pass) {
                 throw new AuthenticationError('Incorrect credentials');
@@ -36,30 +36,30 @@ const resolvers = {
         },
 
 
-        saveBook: async (_, args) => {
+        saveBook: async (parent, args, context) => {
             try {
                 const book = await User.findOneAndUpdate(
-                    { _id: args.id },
+                    { _id: context.user._id },
                     { $addToSet: { savedBooks: args.criteria } },
-                    { new: true, runValidators: true }
+                    { new: true }
                 );
-                return res.json(book);
+                return book;
             } catch (err) {
                 console.log(err);
-                return res.status(400).json(err);
+                return err;
             }
         },
 
-        removeBook: async (_, args) => {
+        removeBook: async (parent, args, context) => {
             const book = await User.findOneAndUpdate(
-                { _id: args.id },
+                { _id: context.user._id },
                 { $pull: { savedBooks: { bookId: args.bookId } } },
                 { new: true }
             );
             if (!book) {
                 return res.status(404).json({ message: "Couldn't find user with this id!" });
             }
-            return res.json(book);
+            return book;
         }
     }
 };

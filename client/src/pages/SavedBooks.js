@@ -30,6 +30,7 @@ const SavedBooks = () => {
     }
 
     try {
+      //usemutate function, no need for token, it only returns a user
       await removeBook({
         variables: { bookId: bookId }
       })

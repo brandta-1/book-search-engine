@@ -2,7 +2,10 @@ const { AuthenticationError } = require('apollo-server-express');
 const { User } = require('../models');
 const { signToken } = require('../utils/auth');
 
+//these are similar to RESTful CRUD endpoints
+
 const resolvers = {
+    //find the current user using the context, see server.js for more info
     Query: {
         me: async (parent, args, context) => {  
             return await User.findOne({ _id: context.user._id }); 

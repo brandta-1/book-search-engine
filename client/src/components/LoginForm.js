@@ -30,10 +30,12 @@ const LoginForm = () => {
     }
 
     try {
+      //usemutation function, send the form data
       const {data} = await loginUser({
         variables: { ...userFormData }
       });
 
+      //successful mutation returns a token, store that in local storage, and redirect to homepage
       const { token } = await data.login;
       console.log(token);
       Auth.login(token);

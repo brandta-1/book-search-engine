@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client';
 
+//the following exports are all mutations, these mutations take in parameters, modify the db, and return the specified results, if any
+
 export const LOGIN_USER = gql`
 
     mutation Login($email: String!, $password: String!) {

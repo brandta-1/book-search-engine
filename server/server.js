@@ -9,6 +9,9 @@ const db = require('./config/connection');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// create an instance of ApolloServer that uses our defined typeDefs and resolvers, as well as authMiddleware context
+// context allows data to be shared throughout server resolvers, in this case, the resolvers will usually need information about who is logged in, so this is the context, provided via JWT
+// context has to return a value, which in the cause of authMiddleWare, is simply the http request with an added data property, which will (hopefully) contain the logged in user's info
 const server = new ApolloServer({ typeDefs, resolvers, context: authMiddleware });
 
 app.use(express.urlencoded({ extended: true }));

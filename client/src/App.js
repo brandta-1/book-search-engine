@@ -8,7 +8,7 @@ import Navbar from './components/Navbar';
 
 // source: basic http networking apollo docs
 
-//set the headers, which will will be included on http requests sent to the server, the server will be able to send conditional data back in an efficient manor known as "context" see server.js
+//set the headers, which will be included on http requests sent to the server, the server will be able to send conditional data back in an efficient manner known as "context" see server.js
 const client = new ApolloClient({
   uri: '/graphql',
   cache: new InMemoryCache(),
